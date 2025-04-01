@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Analyzer</title>
+    <style>
+        /* Navigation Bar */
+        .navbar {
+            background: #3b3bff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            font-size: 14px;
+            position: relative;
+            z-index: 100;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            background: #FFA500;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        /* Body Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            background: 
+                linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)),
+                url('https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* Main Container */
+        .container {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            margin: 30px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* Content Styles */
+        h1 {
+            color: #3b3bff;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2rem;
+        }
+        .metrics {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 30px 0;
+            gap: 10px;
+        }
+        .metric {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            min-width: 80px;
+            flex-grow: 1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3b3bff;
+            margin-bottom: 5px;
+        }
+        .upload-section {
+            border: 2px dashed #ccc;
+            padding: 30px;
+            margin: 20px 0;
+            cursor: pointer;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: rgba(248, 249, 250, 0.9);
+        }
+        .upload-section:hover {
+            border-color: #3b3bff;
+            background: rgba(240, 244, 255, 0.9);
+        }
+        .file-requirements {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 6px;
+            margin: 20px 0;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .job-description {
+            background: rgba(44, 62, 80, 0.95);
+            color: white;
+            padding: 25px;
+            margin-top: 25px;
+            border-radius: 8px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-size: 0.95rem;
+        }
+
+        /* Futuristic Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, #3b3bff 0%, #6e00ff 100%);
+            padding: 30px;
+            margin-top: 30px;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(59, 59, 255, 0.3);
+            border: none;
+        }
+        .contact-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80') center/cover;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .contact-section h2 {
+            color: #FFA500;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            position: relative;
+        }
+        .contact-info a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .contact-info a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-3px);
+            color: #FFA500;
+        }
+        .contact-info p {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            display: inline-block;
+        }
+        .contact-icon {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="logo">
+            <div class="logo-icon">AI</div>
+            <div>Resume</div>
+        </div>
+        <div>
+            <a href="#">PRICING</a>
+            <a href="#">SIGN IN</a>
+            <a href="#contact">GET IN TOUCH</a>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Is your resume good enough?</h1>
+        
+        <div class="metrics">
+            <div class="metric">
+                <div class="metric-value">0.7x</div>
+                <div>Match Rate</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">2.75mm</div>
+                <div>Keyword Density</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">25.6%</div>
+                <div>ATS Score</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">47.9%</div>
+                <div>Impact Score</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">17mHz</div>
+                <div>Readability</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">24m/s</div>
+                <div>Scan Speed</div>
+            </div>
+        </div>
+        
+        <div class="upload-section" id="dropZone">
+            <p>Drop your resume here or choose a file.</p>
+            <p class="file-requirements">PDF & DOCX only. Max 2MB file size.</p>
+            <input type="file" id="fileInput" accept=".pdf,.docx" style="display: none;">
+        </div>
+        
+        <button id="uploadButton">Upload Your Resume</button>
+        
+        <div class="job-description">
+            <p>Enter job description.<br>
+            Copy-paste or type it here.<br>
+            Focus on critical skills, requirements or qualifications.<br>
+            Avoid generic keywords or buzzwords. Be as descriptive as possible.</p>
+            <textarea id="jobDescription" placeholder="Paste job description here..."></textarea>
+        </div>
+        
+        <!-- Innovative Contact Section -->
+        <div class="contact-section" id="contact">
+            <h2><span class="contact-icon">🚀</span> Get In Touch</h2>
+            <div class="contact-info">
+                <a href="mailto:support@elevatexio.com">
+                    <span class="contact-icon">✉</span> support@elevatexio.com
+                </a>
+                <a href="tel:+919332315344">
+                    <span class="contact-icon">📱</span> +91 93323 15344
+                </a>
+                <a href="tel:+918918735480">
+                    <span class="contact-icon">📱</span> +91 89187 35480
+                </a>
+                <p>
+                    <span class="contact-icon">📍</span> Khulna Sadar, Khulna, Bangladesh - 9100
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const uploadButton = document.getElementById('uploadButton');
+            
+            // Click handler for drop zone
+            dropZone.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // Handle selected files
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    alert('File selected: ' + this.files[0].name);
+                }
+            });
+            
+            // Upload button handler
+            uploadButton.addEventListener('click', function() {
+                alert('Resume upload functionality would go here');
+            });
+        });
+    </script>
+</body>
+</html>
